@@ -1,2 +1,5 @@
-# kubernetes-cluster-on-arm
-Project of simple Kubernetes cluster on ARM nodes
+# Kubernetes cluster on ARM nodes (WIP)
+
+Project of simple Kubernetes cluster on ARM nodes.
+
+![Image](arm-cluster.png)
