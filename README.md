@@ -12,6 +12,11 @@ Project of simple Kubernetes cluster on ARM nodes.
     + [Creating ARM64 VM](#creating-arm64-vm)
     + [Installing Ubuntu to VM](#installing-ubuntu-to-vm)
   * [Installing Ubuntu to NanoPi NEO3](#installing-ubuntu-to-nanopi-neo3)
+- [Deploying K3S with help of Ansible](#deploying-k3s-with-help-of-ansible)
+  * [Deploy SSH keys (optional)](#deploy-ssh-keys-optional)
+  * [Install all required packages on all servers](#install-all-required-packages-on-all-servers)
+  * [Deploy k3s server to VM](#deploy-k3s-server-to-vm)
+  * [Deploy k3s agent to nodes](#deploy-k3s-agent-to-nodes)
 - [Video blog about this project](#video-blog-about-this-project)
 
 <!-- tocstop -->
@@ -166,7 +171,7 @@ After first login NanoPi's promt will ask you about a new password and some othe
 
 NanoPi is ready for usage, congrats :)
 
-## How to deploy k3s
+## Deploying K3S with help of Ansible
 
 Here will be described part about installing additional tools to controller and nodes, plus about deploy
 of docker-compose configs to machines.
