@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  agent:
+    restart: unless-stopped
+    image: "rancher/k3s:${K3S_VERSION:-latest}"
+    tmpfs:
+      - /run
+      - /var/run
+    privileged: true
+    environment:
+      - K3S_URL=https://192.168.1.199:6443
+      - K3S_TOKEN=${K3S_TOKEN:?err}
+
+  rancher:
+    restart: unless-stopped
+    image: "rancher/rancher:${RANCER_VERSION:-latest}"
+    privileged: true
+    volumes:
+      - ./rancher/ssl:/etc/rancher/ssl
+    ports:
+      - 80:80
+      - 443:443

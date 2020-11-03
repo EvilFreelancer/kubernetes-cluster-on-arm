@@ -1,0 +1,20 @@
+---
+- hosts: all
+
+  tasks:
+
+  - name: Create ~/.ssh directory with permissions
+    file:
+      path: "/home/pasha/.ssh"
+      state: directory
+      owner: pasha
+      group: pasha
+      mode: 0755
+
+  - name: Copy authorized_keys to ~/.ssh with permissions
+    copy:
+      src: ./ssh/authorized_keys
+      dest: /home/pasha/.ssh/authorized_keys
+      owner: pasha
+      group: pasha
+      mode: 0600

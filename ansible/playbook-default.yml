@@ -1,0 +1,65 @@
+---
+- hosts: all
+  become: true
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+
+    - name: Test connection
+      ping:
+
+    # Install required packages
+    - name: Update the APT packages index
+      become: yes
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Install packages via APT
+      become: yes
+      apt:
+        name: "{{ packages }}"
+        force_apt_get: yes
+        state: latest
+        update_cache: yes
+
+    # Install Docker engine
+    - name: Add APT signing key from official Docker repo
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker official repository for Ubuntu Focal
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Index new repo into the cache
+      become: yes
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Actually install docker
+      apt:
+        name: "docker.io"
+        state: latest
+
+    # Add user to docker group
+    - name: Adding existing user '{{ user }}' to group sudo
+      user:
+        name: "{{ user }}"
+        groups: docker
+        append: yes
+
+    # Install some Python packages
+    - name: Install Python libraries required for automation
+      pip:
+        name:
+          - docker
+          - docker-compose
