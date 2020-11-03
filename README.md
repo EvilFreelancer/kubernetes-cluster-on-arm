@@ -166,10 +166,77 @@ After first login NanoPi's promt will ask you about a new password and some othe
 
 NanoPi is ready for usage, congrats :)
 
+## How to deploy k3s
+
+Here will be described part about installing additional tools to controller and nodes, plus about deploy
+of docker-compose configs to machines.
+
+First need to install ansible tool via package manager:
+
+```
+sudo apt-get install ansible
+```
+
+All commands below will be executed in `ansible` subfolder: 
+
+```
+cd ansible
+```
+
+All hosts and groups described in `inventory` file:
+
+```
+cat inventory
+``` 
+
+### Deploy SSH keys (optional)
+
+> playbook-ssh.yml
+
+If you want you can deploy to all machines of cluster `authorized_keys` file:
+
+``
+ansible-playbook -i inventory playbook-ssh.yml -e ansible_password=password
+``
+
+### Install all required packages on all servers
+
+It's a default playbook, steps descrbed in this file should be execute on all
+machines of cluster.
+
+```
+ansible-playbook -i inventory playbook-default.yml --ask-become-pass
+```
+
+### Deploy k3s server to VM
+
+K3S server is a core of our project, it will execute management operations.
+
+Second servise here is Rancher web-interface.
+
+```
+ansible-playbook -i inventory playbook-controller.yml
+```
+
+After executing this command API of Kubernetes cluster will be available on https://192.168.1.199:6443
+
+Rancher web-interface will be available here https://192.168.1.199
+
+### Deploy k3s agent to nodes
+
+Now we just need add nodes to cluster controller, nodes will connect automatically:
+
+```
+ansible-playbook -i inventory playbook-node.yml
+```
+
+Then go to Rancher web-interface and look at Nodes tab.
+
 ## Video blog about this project
 
 All videos on Russian language.
 
 1. [Introduction and technical description](https://www.youtube.com/watch?v=jXRgqQrbKAo)
-2. Installing operation systems
-3. TBA...
+2. [Installing operation systems](https://www.youtube.com/watch?v=A4kwBo6eRKE)
+3. Installing and using additional tools for automation
+4. TBA...
