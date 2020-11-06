@@ -6,9 +6,6 @@
 
   tasks:
 
-    - name: Test connection
-      ping:
-
     # Install required packages
     - name: Update the APT packages index
       become: yes
@@ -34,7 +31,7 @@
 
     - name: Add Docker official repository for Ubuntu Focal
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable
         state: present
 
     - name: Index new repo into the cache

@@ -5,23 +5,20 @@
 
   tasks:
 
-    - name: Test connection
-      ping:
-
-    - name: Create /home/{{ user }}/k3s-node directory
+    - name: Create "/home/{{ user }}/k3s-node" directory
       file:
         path: "/home/{{ user }}/k3s-node"
         state: directory
-        owner: pasha
-        group: pasha
+        owner: {{ user }}
+        group: {{ user }}
         mode: 0755
 
-    - name: Copy docker-compose.yml to /home/{{ user }}/k3s-node/
+    - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-node/"
       copy:
         src: ../k3s-node/docker-compose.yml
         dest: /home/{{ user }}/k3s-node/docker-compose.yml
-        owner: pasha
-        group: pasha
+        owner: {{ user }}
+        group: {{ user }}
         mode: 0644
 
     - name: Pull services defined in docker-compose.yml
