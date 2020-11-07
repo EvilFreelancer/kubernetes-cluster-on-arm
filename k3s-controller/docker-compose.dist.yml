@@ -3,8 +3,8 @@ version: '3'
 services:
 
   server:
-    restart: unless-stopped
     image: "rancher/k3s:${K3S_VERSION:-latest}"
+    restart: "unless-stopped"
     command: server
     tmpfs:
       - /run
@@ -17,6 +17,14 @@ services:
     volumes:
       - ./k3s-server:/var/lib/rancher/k3s
       # This is just so that we get the kubeconfig file out
-      - .:/output
+      - ./output:/output
     ports:
       - 6443:6443
+
+  rancher:
+    image: "rancher/rancher:${RANCHER_VERSION:-latest}"
+    restart: "unless-stopped"
+    privileged: true
+    ports:
+      - 80:80
+      - 443:443
