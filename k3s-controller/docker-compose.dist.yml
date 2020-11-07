@@ -20,11 +20,23 @@ services:
       - ./output:/output
     ports:
       - 6443:6443
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50k"
 
   rancher:
-    image: "rancher/rancher:${RANCHER_VERSION:-latest}"
+    image: "rancher/rancher:${RANCHER_VERSION:-master-head}"
     restart: "unless-stopped"
     privileged: true
+    volumes:
+      - ./rancher/ssl:/etc/rancher/ssl
     ports:
       - 80:80
       - 443:443
+    depends_on:
+      - server
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50k"
