@@ -18,5 +18,3 @@
     - dnsutils
     - inetutils-ping
     - python3-pip
-
-- docker_compose: "1.27.4"

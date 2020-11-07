@@ -8,15 +8,13 @@
 
     # Install required packages
     - name: Update the APT packages index
-      become: yes
       apt:
         name: "*"
         state: latest
         update_cache: yes
         force_apt_get: yes
 
-    - name: Install packages via APT
-      become: yes
+    - name: Install all required packages
       apt:
         name: "{{ packages }}"
         force_apt_get: yes
@@ -35,7 +33,6 @@
         state: present
 
     - name: Index new repo into the cache
-      become: yes
       apt:
         name: "*"
         state: latest
@@ -55,7 +52,7 @@
         append: yes
 
     # Install some Python packages
-    - name: Install Python libraries required for automation
+    - name: Install packages via PIP
       pip:
         name:
           - docker
