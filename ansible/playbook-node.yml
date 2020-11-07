@@ -9,16 +9,12 @@
       file:
         path: "/home/{{ user }}/k3s-node"
         state: directory
-        owner: {{ user }}
-        group: {{ user }}
         mode: 0755
 
     - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-node/"
       copy:
         src: ../k3s-node/docker-compose.yml
         dest: /home/{{ user }}/k3s-node/docker-compose.yml
-        owner: {{ user }}
-        group: {{ user }}
         mode: 0644
 
     - name: Pull services defined in docker-compose.yml

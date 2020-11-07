@@ -55,5 +55,4 @@
     - name: Install packages via PIP
       pip:
         name:
-          - docker
           - docker-compose

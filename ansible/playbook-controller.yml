@@ -12,16 +12,12 @@
       file:
         path: "/home/{{ user }}/k3s-controller"
         state: directory
-        owner: {{ user }}
-        group: {{ user }}
         mode: 0755
 
     - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-controller/"
       copy:
         src: ../k3s-controller/docker-compose.yml
         dest: /home/{{ user }}/k3s-controller/docker-compose.yml
-        owner: {{ user }}
-        group: {{ user }}
         mode: 0644
 
     - name: Pull services defined in docker-compose.yml
