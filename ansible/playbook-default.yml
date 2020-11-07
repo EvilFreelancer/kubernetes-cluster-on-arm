@@ -17,9 +17,9 @@
     - name: Install all required packages
       apt:
         name: "{{ packages }}"
-        force_apt_get: yes
         state: latest
         update_cache: yes
+        force_apt_get: yes
 
     # Install Docker engine
     - name: Add APT signing key from official Docker repo
@@ -32,7 +32,7 @@
         repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable
         state: present
 
-    - name: Index new repo into the cache
+    - name: Update the APT packages index
       apt:
         name: "*"
         state: latest
@@ -41,11 +41,16 @@
 
     - name: Actually install docker
       apt:
-        name: "docker.io"
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
         state: latest
+        update_cache: yes
+        force_apt_get: yes
 
     # Add user to docker group
-    - name: Adding existing user '{{ user }}' to group sudo
+    - name: Adding existing user "{{ user }}" to docker group
       user:
         name: "{{ user }}"
         groups: docker

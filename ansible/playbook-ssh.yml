@@ -2,10 +2,9 @@
 - hosts: all
   vars_files:
     - vars/default.yml
-
   tasks:
 
-    - name: Create "/home/{{ user }}/.ssh"
+    - name: Create "/home/{{ user }}/.ssh" directory
       file:
         path: "/home/{{ user }}/.ssh"
         state: directory
