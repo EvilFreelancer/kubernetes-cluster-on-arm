@@ -3,10 +3,8 @@
   become: true
   vars_files:
     - vars/default.yml
-
   tasks:
 
-    # Install required packages
     - name: Update the APT packages index
       apt:
         name: "*"
@@ -21,7 +19,6 @@
         update_cache: yes
         force_apt_get: yes
 
-    # Install Docker engine
     - name: Add APT signing key from official Docker repo
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
@@ -29,7 +26,7 @@
 
     - name: Add Docker official repository for Ubuntu Focal
       apt_repository:
-        repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu focal stable
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
         state: present
 
     - name: Update the APT packages index
@@ -49,14 +46,12 @@
         update_cache: yes
         force_apt_get: yes
 
-    # Add user to docker group
     - name: Adding existing user "{{ user }}" to docker group
       user:
         name: "{{ user }}"
         groups: docker
         append: yes
 
-    # Install some Python packages
     - name: Install packages via PIP
       pip:
         name:

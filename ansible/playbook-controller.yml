@@ -1,12 +1,8 @@
-----
+---
 - hosts: controller
   vars_files:
     - vars/default.yml
-
   tasks:
-
-    - name: Test connection
-      ping:
 
     - name: Create "/home/{{ user }}/k3s-controller" directory
       file:
@@ -14,7 +10,7 @@
         state: directory
         mode: 0755
 
-    - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-controller/"
+    - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-controller/" directory
       copy:
         src: ../k3s-controller/docker-compose.yml
         dest: /home/{{ user }}/k3s-controller/docker-compose.yml

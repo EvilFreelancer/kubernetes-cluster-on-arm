@@ -1,8 +1,7 @@
-----
+---
 - hosts: node
   vars_files:
     - vars/default.yml
-
   tasks:
 
     - name: Create "/home/{{ user }}/k3s-node" directory
@@ -11,7 +10,7 @@
         state: directory
         mode: 0755
 
-    - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-node/"
+    - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-node/" directory
       copy:
         src: ../k3s-node/docker-compose.yml
         dest: /home/{{ user }}/k3s-node/docker-compose.yml
