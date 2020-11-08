@@ -1,0 +1,12 @@
+---
+- hosts: controller
+  vars_files:
+    - vars/default.yml
+  tasks:
+
+    - name: Stop and Remove services defined in docker-compose.yml
+      command: docker-compose -f /home/{{ user }}/k3s-controller/docker-compose.yml rm -fs
+
+    - name: Remove TMP files
+      become: true
+      command: rm -Rf /home/{{ user }}/k3s-controller/k3s-server /home/{{ user }}/k3s-controller/output
