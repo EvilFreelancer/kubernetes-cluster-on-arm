@@ -1,0 +1,17 @@
+---
+- hosts: all
+  vars_files:
+    - vars/default.yml
+  tasks:
+
+    - name: Create "/home/{{ user }}/.ssh" directory
+      file:
+        path: "/home/{{ user }}/.ssh"
+        state: directory
+        mode: 0700
+
+    - name: Copy "authorized_keys" to "/home/{{ user }}/.ssh/" directory
+      copy:
+        src: ./ssh/authorized_keys
+        dest: /home/{{ user }}/.ssh/authorized_keys
+        mode: 0600

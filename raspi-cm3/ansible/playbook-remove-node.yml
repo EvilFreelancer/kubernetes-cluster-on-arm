@@ -1,0 +1,8 @@
+---
+- hosts: node
+  vars_files:
+    - vars/default.yml
+  tasks:
+
+    - name: Stop and Remove services defined in docker-compose.yml
+      command: docker-compose -f /home/{{ user }}/k3s-node/docker-compose.yml rm -fs
