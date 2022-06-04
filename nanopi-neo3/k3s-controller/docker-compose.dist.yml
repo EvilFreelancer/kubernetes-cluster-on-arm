@@ -1,10 +1,10 @@
-version: '3'
+version: '2.4'
 services:
 
   server:
     image: "rancher/k3s:${K3S_VERSION:-latest}"
     restart: "unless-stopped"
-    command: ["server", "--node-external-ip", "192.168.1.199"]
+    command: ["server", "--node-external-ip", "192.168.1.200"]
     tmpfs:
       - /run
       - /var/run
@@ -18,7 +18,8 @@ services:
       # This is just so that we get the kubeconfig file out
       - ./output:/output
     ports:
-      - 6443:6443
+      - "6443:6443"
+    mem_limit: 500m
     logging:
       driver: "json-file"
       options:

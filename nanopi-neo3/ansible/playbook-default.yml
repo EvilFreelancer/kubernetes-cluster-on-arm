@@ -57,3 +57,4 @@
         name:
           - docker
           - docker-compose
+        state: latest

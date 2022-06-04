@@ -4,6 +4,23 @@
     - vars/default.yml
   tasks:
 
+    - name: Install additional packages
+      become: true
+      apt:
+        name:
+          - linux-modules-extra-raspi
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
+
+    - name: Add the vxlan module
+      become: true
+      modprobe:
+        name: vxlan
+        state: present
+      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
+
     - name: Create "/home/{{ user }}/k3s-controller" directory
       file:
         path: "/home/{{ user }}/k3s-controller"
