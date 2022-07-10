@@ -192,7 +192,53 @@ Now we just need add nodes to cluster controller, nodes will join to cluster aut
 ansible-playbook -i inventory playbook-node.yml
 ```
 
-Then go to Rancher web-interface and look at Nodes tab.
+### Install and configure kubectl
+
+Instruction related to your OS [is here](https://kubernetes.io/docs/tasks/tools/).
+
+Need to change directory to `~/.kube` and download kubeconfig from k8s-controller:
+
+```shell
+[ -d ~/.kube ] || mkdir ~/.kube
+cd ~/.kube
+cp config config.bak
+scp k8s-controller:/home/pasha/k3s-controller/output/kubeconfig.yaml config
+```
+
+Test installation:
+
+```shell
+kubectl get nodes
+```
+
+In result will be something like this:
+```text
+NAME             STATUS   ROLES                  AGE   VERSION
+k8s-node4        Ready    <none>                 31m   v1.22.11+k3s2
+k8s-node2        Ready    <none>                 31m   v1.22.11+k3s2
+k8s-node3        Ready    <none>                 31m   v1.22.11+k3s2
+k8s-node1        Ready    <none>                 31m   v1.22.11+k3s2
+k8s-node6        Ready    <none>                 31m   v1.22.11+k3s2
+k8s-node7        Ready    <none>                 30m   v1.22.11+k3s2
+k8s-node5        Ready    <none>                 31m   v1.22.11+k3s2
+k8s-controller   Ready    control-plane,master   32m   v1.22.11+k3s2
+```
+
+## How to enable Kubernetes Dashboard
+
+Go to folder with dashboard installation scripts: 
+
+```shell
+cd k8s-dashboard
+```
+
+Run `install.sh` then wait couple minutes, after script is done run following command:
+
+```shell
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard  9090:80
+```
+
+Then open http://localhost:9090 in browser.
 
 ## Video blog about this project
 
@@ -202,3 +248,7 @@ All videos on Russian language.
 2. [Installing operating systems](https://www.youtube.com/watch?v=A4kwBo6eRKE)
 3. Installing and using additional tools for automation
 4. TBA...
+
+## Links
+
+* https://medium.com/@tejaswi.goudru/disable-authentication-https-in-kubernetes-dashboard-2fada478ce91

@@ -38,7 +38,11 @@ metadata:
   namespace: kubernetes-dashboard
 spec:
   ports:
-    - port: 80
+    - name: https
+      port: 443
+      targetPort: 8443
+    - name: http
+      port: 80
       targetPort: 9090
   selector:
     k8s-app: kubernetes-dashboard
@@ -99,24 +103,24 @@ metadata:
   namespace: kubernetes-dashboard
 rules:
   # Allow Dashboard to get, update and delete Dashboard exclusive secrets.
-  - apiGroups: [""]
-    resources: ["secrets"]
-    resourceNames: ["kubernetes-dashboard-key-holder", "kubernetes-dashboard-certs", "kubernetes-dashboard-csrf"]
-    verbs: ["get", "update", "delete"]
+  - apiGroups: [ "" ]
+    resources: [ "secrets" ]
+    resourceNames: [ "kubernetes-dashboard-key-holder", "kubernetes-dashboard-certs", "kubernetes-dashboard-csrf" ]
+    verbs: [ "get", "update", "delete" ]
     # Allow Dashboard to get and update 'kubernetes-dashboard-settings' config map.
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    resourceNames: ["kubernetes-dashboard-settings"]
-    verbs: ["get", "update"]
+  - apiGroups: [ "" ]
+    resources: [ "configmaps" ]
+    resourceNames: [ "kubernetes-dashboard-settings" ]
+    verbs: [ "get", "update" ]
     # Allow Dashboard to get metrics.
-  - apiGroups: [""]
-    resources: ["services"]
-    resourceNames: ["heapster", "dashboard-metrics-scraper"]
-    verbs: ["proxy"]
-  - apiGroups: [""]
-    resources: ["services/proxy"]
-    resourceNames: ["heapster", "http:heapster:", "https:heapster:", "dashboard-metrics-scraper", "http:dashboard-metrics-scraper"]
-    verbs: ["get"]
+  - apiGroups: [ "" ]
+    resources: [ "services" ]
+    resourceNames: [ "heapster", "dashboard-metrics-scraper" ]
+    verbs: [ "proxy" ]
+  - apiGroups: [ "" ]
+    resources: [ "services/proxy" ]
+    resourceNames: [ "heapster", "http:heapster:", "https:heapster:", "dashboard-metrics-scraper", "http:dashboard-metrics-scraper" ]
+    verbs: [ "get" ]
 
 ---
 
@@ -128,9 +132,9 @@ metadata:
   name: kubernetes-dashboard
 rules:
   # Allow Metrics Scraper to get metrics from the Metrics server
-  - apiGroups: ["metrics.k8s.io"]
-    resources: ["pods", "nodes"]
-    verbs: ["get", "list", "watch"]
+  - apiGroups: [ "metrics.k8s.io" ]
+    resources: [ "pods", "nodes" ]
+    verbs: [ "get", "list", "watch" ]
 
 ---
 
@@ -156,6 +160,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -185,9 +190,6 @@ spec:
       labels:
         k8s-app: kubernetes-dashboard
     spec:
-      securityContext:
-        seccompProfile:
-          type: RuntimeDefault
       containers:
         - name: kubernetes-dashboard
           image: kubernetesui/dashboard:v2.6.0
@@ -195,12 +197,15 @@ spec:
           ports:
             - containerPort: 8443
               protocol: TCP
+            - containerPort: 9090
+              protocol: TCP
           args:
+            #- --auto-generate-certificates
+            - --namespace=kubernetes-dashboard
             - --enable-skip-login
             - --disable-settings-authorizer
             - --enable-insecure-login
             - --insecure-bind-address=0.0.0.0
-            - --namespace=kubernetes-dashboard
             # Uncomment the following line to manually specify Kubernetes API server Host
             # If not specified, Dashboard will attempt to auto discover the API server and connect
             # to it. Uncomment only if the default does not work.
@@ -213,9 +218,9 @@ spec:
               name: tmp-volume
           livenessProbe:
             httpGet:
-              scheme: HTTPS
+              scheme: HTTP
               path: /
-              port: 8443
+              port: 9090
             initialDelaySeconds: 30
             timeoutSeconds: 30
           securityContext:
@@ -228,7 +233,7 @@ spec:
           secret:
             secretName: kubernetes-dashboard-certs
         - name: tmp-volume
-          emptyDir: {}
+          emptyDir: { }
       serviceAccountName: kubernetes-dashboard
       nodeSelector:
         "kubernetes.io/os": linux
@@ -290,8 +295,8 @@ spec:
             initialDelaySeconds: 30
             timeoutSeconds: 30
           volumeMounts:
-          - mountPath: /tmp
-            name: tmp-volume
+            - mountPath: /tmp
+              name: tmp-volume
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -306,4 +311,4 @@ spec:
           effect: NoSchedule
       volumes:
         - name: tmp-volume
-          emptyDir: {}
+          emptyDir: { }
