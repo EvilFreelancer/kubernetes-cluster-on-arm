@@ -21,6 +21,7 @@ services:
       - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
       - K3S_KUBECONFIG_MODE=666
     volumes:
+      - /etc/machine-id:/etc/machine-id:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - ./k3s-server:/var/lib/rancher/k3s
       # This is just so that we get the kubeconfig file out
