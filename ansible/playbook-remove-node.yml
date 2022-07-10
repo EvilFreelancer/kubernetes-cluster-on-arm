@@ -5,4 +5,4 @@
   tasks:
 
     - name: Stop and Remove services defined in docker-compose.yml
-      command: docker-compose -f /home/{{ user }}/k3s-node/docker-compose.yml rm -fs
+      command: docker-compose -f /home/{{ username }}/k3s-node/docker-compose.yml rm -fs

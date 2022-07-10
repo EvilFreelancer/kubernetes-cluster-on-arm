@@ -1,0 +1,24 @@
+---
+- hosts: node
+  vars_files:
+    - vars/default.yml
+    - vars/user.yml
+  tasks:
+
+    - name: Create "/home/{{ username }}/k3s-node" directory
+      file:
+        path: "/home/{{ username }}/k3s-node"
+        state: directory
+        mode: 0755
+
+    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-node/" directory
+      copy:
+        src: ../k3s-node/docker-compose.yml
+        dest: /home/{{ username }}/k3s-node/docker-compose.yml
+        mode: 0644
+
+    - name: Pull services defined in docker-compose.yml
+      command: docker-compose -f /home/{{ username }}/k3s-node/docker-compose.yml pull
+
+    - name: Run services defined in docker-compose.yml
+      command: docker-compose -f /home/{{ username }}/k3s-node/docker-compose.yml up -d

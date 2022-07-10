@@ -1,0 +1,3 @@
+---
+- username: pasha
+- pub_key: /home/pasha/.ssh/id_rsa.pub

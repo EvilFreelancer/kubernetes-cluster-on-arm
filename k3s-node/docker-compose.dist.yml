@@ -1,4 +1,5 @@
 version: '3'
+
 services:
 
   agent:
@@ -7,10 +8,15 @@ services:
     tmpfs:
       - /run
       - /var/run
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
     privileged: true
     environment:
-      - K3S_URL=https://192.168.1.199:6443
-      - K3S_TOKEN=${K3S_TOKEN:?err}
+      - K3S_URL=https://k8s-controller:6443
+      - K3S_TOKEN=983d7454-20ae-11eb-b0db-ff72ee78a062
     logging:
       driver: "json-file"
       options:

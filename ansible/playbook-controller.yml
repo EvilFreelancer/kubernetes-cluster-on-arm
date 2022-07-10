@@ -21,20 +21,20 @@
         state: present
       when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
 
-    - name: Create "/home/{{ user }}/k3s-controller" directory
+    - name: Create "/home/{{ username }}/k3s-controller" directory
       file:
-        path: "/home/{{ user }}/k3s-controller"
+        path: "/home/{{ username }}/k3s-controller"
         state: directory
         mode: 0755
 
-    - name: Copy "docker-compose.yml" to "/home/{{ user }}/k3s-controller/" directory
+    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-controller/" directory
       copy:
         src: ../k3s-controller/docker-compose.yml
-        dest: /home/{{ user }}/k3s-controller/docker-compose.yml
+        dest: /home/{{ username }}/k3s-controller/docker-compose.yml
         mode: 0644
 
     - name: Pull services defined in docker-compose.yml
-      command: docker-compose -f /home/{{ user }}/k3s-controller/docker-compose.yml pull
+      command: docker-compose -f /home/{{ username }}/k3s-controller/docker-compose.yml pull
 
     - name: Run services defined in docker-compose.yml
-      command: docker-compose -f /home/{{ user }}/k3s-controller/docker-compose.yml up -d
+      command: docker-compose -f /home/{{ username }}/k3s-controller/docker-compose.yml up -d

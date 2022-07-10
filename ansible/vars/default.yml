@@ -1,6 +1,4 @@
 ---
-- user: "pasha"
-
 - packages:
     - bash-completion
     - git

@@ -3,7 +3,13 @@
   become: true
   vars_files:
     - vars/default.yml
+    - vars/user.yml
   tasks:
+
+    - name: Set up authorized keys for the "{{ username }}" user
+      authorized_key: user="{{ username }}" key="{{ item }}"
+      with_file:
+        - "{{ pub_key }}"
 
     - name: Update the APT packages index
       apt:
@@ -46,9 +52,9 @@
         update_cache: yes
         force_apt_get: yes
 
-    - name: Adding existing user "{{ user }}" to docker group
+    - name: Adding existing user "{{ username }}" to docker group
       user:
-        name: "{{ user }}"
+        name: "{{ username }}"
         groups: docker
         append: yes
 
