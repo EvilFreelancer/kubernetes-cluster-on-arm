@@ -2,6 +2,7 @@
 - hosts: controller
   vars_files:
     - vars/default.yml
+    - vars/user.yml
   tasks:
 
     - name: Stop and Remove services defined in docker-compose.yml

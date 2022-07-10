@@ -18,6 +18,23 @@
         update_cache: yes
         force_apt_get: yes
 
+    - name: Install additional packages
+      become: true
+      apt:
+        name:
+          - linux-modules-extra-raspi
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
+
+    - name: Add the vxlan module
+      become: true
+      modprobe:
+        name: vxlan
+        state: present
+      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
+
     - name: Install all required packages
       apt:
         name: "{{ packages }}"

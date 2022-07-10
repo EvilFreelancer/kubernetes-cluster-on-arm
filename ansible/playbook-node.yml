@@ -11,10 +11,11 @@
         state: directory
         mode: 0755
 
-    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-node/" directory
+    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-node/" directory (in not exists)
       copy:
         src: ../k3s-node/docker-compose.yml
         dest: /home/{{ username }}/k3s-node/docker-compose.yml
+        force: no
         mode: 0644
 
     - name: Pull services defined in docker-compose.yml

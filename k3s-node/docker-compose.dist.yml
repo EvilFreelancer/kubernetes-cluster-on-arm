@@ -5,6 +5,7 @@ services:
   agent:
     image: "rancher/k3s:${K3S_VERSION:-latest}"
     restart: "unless-stopped"
+    network_mode: "host"
     tmpfs:
       - /run
       - /var/run
@@ -15,8 +16,10 @@ services:
         hard: 65535
     privileged: true
     environment:
-      - K3S_URL=https://k8s-controller:6443
-      - K3S_TOKEN=983d7454-20ae-11eb-b0db-ff72ee78a062
+      - K3S_URL=https://192.168.1.200:6443
+      - K3S_TOKEN=${K3S_TOKEN:?err}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     logging:
       driver: "json-file"
       options:

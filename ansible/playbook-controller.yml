@@ -2,24 +2,8 @@
 - hosts: controller
   vars_files:
     - vars/default.yml
+    - vars/user.yml
   tasks:
-
-    - name: Install additional packages
-      become: true
-      apt:
-        name:
-          - linux-modules-extra-raspi
-        state: latest
-        update_cache: yes
-        force_apt_get: yes
-      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
-
-    - name: Add the vxlan module
-      become: true
-      modprobe:
-        name: vxlan
-        state: present
-      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
 
     - name: Create "/home/{{ username }}/k3s-controller" directory
       file:
@@ -27,10 +11,11 @@
         state: directory
         mode: 0755
 
-    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-controller/" directory
+    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-controller/" directory (in not exists)
       copy:
         src: ../k3s-controller/docker-compose.yml
         dest: /home/{{ username }}/k3s-controller/docker-compose.yml
+        force: no
         mode: 0644
 
     - name: Pull services defined in docker-compose.yml

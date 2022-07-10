@@ -5,7 +5,8 @@ services:
   server:
     image: "rancher/k3s:${K3S_VERSION:-latest}"
     restart: "unless-stopped"
-    command: ["server", "--advertise-address", "192.168.1.200"]
+    command: ["server"]
+    network_mode: "host"
     tmpfs:
       - /run
       - /var/run
@@ -20,15 +21,12 @@ services:
       - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig.yaml
       - K3S_KUBECONFIG_MODE=666
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./k3s-server:/var/lib/rancher/k3s
       # This is just so that we get the kubeconfig file out
       - ./output:/output
-    mem_limit: 600m
+    mem_limit: 1024m
     logging:
       driver: "json-file"
       options:
         max-size: "50k"
-    ports:
-      - "6443:6443"  # Kubernetes API Server
-      - "80:80"      # Ingress controller port 80
-      - "443:443"    # Ingress controller port 443

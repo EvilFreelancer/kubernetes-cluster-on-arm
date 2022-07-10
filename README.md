@@ -64,13 +64,13 @@ https://armbian.hosthatch.com/archive/nanopineo3/archive/
 
 Then extract an archive:
 
-```shell script
+```shell
 xz -d Armbian_21.08.1_Nanopineo3_focal_current_5.10.60.img.xz
 ```
 
 Then connect MicroSD card and check name of device:
 
-```shell script
+```shell
 ~$ sudo fdisk -l | grep 'model: Micro' -A 10 -B 2
 
 Disk /dev/sdX: 29,81 GiB, 32010928128 bytes, 62521344 sectors
@@ -86,7 +86,7 @@ Disk identifier: 0x0000000
 
 Flash the image to this card:
 
-```shell script
+```shell
 dd if=Armbian_21.08.1_Nanopineo3_focal_current_5.10.60.img of=/dev/sdX bs=1024k status=progress
 ```
 
@@ -114,7 +114,7 @@ Need to install `rpi-imager` tool:
 
 https://github.com/raspberrypi/rpi-imager
 
-```shell script
+```shell
 sudo apt-get install rpi-imager
 ```
 
@@ -131,30 +131,40 @@ of docker-compose configs to machines.
 
 First need to install ansible tool via package manager:
 
-```
+```shell
 sudo apt-get install ansible
 ```
 
 All commands below will be executed in `ansible` subfolder:
 
-```
+```shell
 cd ansible
 ```
 
 All hosts and groups described in `inventory` file, copy from example, then change to your hosts:
 
-```
+```shell
 cp inventory.dist inventory
+mcedit inventory
 ```
+
+Also need to set username with sudo permissions:
+
+```shell
+cp vars/user.dist.yml vars/user.yml
+mcedit vars/user.yml
+```
+
+Don't forget to change path to `id_rsa.pub` public key file.
 
 ### Install all required packages on all servers
 
 > playbook-default.yml
 
-It's a default playbook, steps descrbed in this file should be execute on all
-machines of cluster.
+It's a default playbook, steps described in this file should be executed on all
+machines of cluster, required sudo privileges.
 
-```
+```shell
 ansible-playbook -i inventory playbook-default.yml --ask-become-pass
 ```
 
@@ -166,8 +176,8 @@ K3S server is a core of our project, it will execute management operations.
 
 Second service here is Rancher web-interface.
 
-```
-ansible-playbook -i inventory playbook-controller.yml --ask-become-pass
+```shell
+ansible-playbook -i inventory playbook-controller.yml
 ```
 
 After executing this command API of Kubernetes cluster will be available on https://192.168.1.200:6443
@@ -176,9 +186,9 @@ After executing this command API of Kubernetes cluster will be available on http
 
 > playbook-node.yml
 
-Now we just need add nodes to cluster controller, nodes will connect automatically:
+Now we just need add nodes to cluster controller, nodes will join to cluster automatically:
 
-```
+```shell
 ansible-playbook -i inventory playbook-node.yml
 ```
 
@@ -189,6 +199,6 @@ Then go to Rancher web-interface and look at Nodes tab.
 All videos on Russian language.
 
 1. [Introduction and technical description](https://www.youtube.com/watch?v=jXRgqQrbKAo)
-2. [Installing operation systems](https://www.youtube.com/watch?v=A4kwBo6eRKE)
+2. [Installing operating systems](https://www.youtube.com/watch?v=A4kwBo6eRKE)
 3. Installing and using additional tools for automation
 4. TBA...
