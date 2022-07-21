@@ -1,8 +1,8 @@
-### Proxmox
+# Proxmox
 
 Proxmox is a controller of Virtual Machines, more details [here](https://www.proxmox.com/).
 
-#### Creating ARM64 VM
+## Creating ARM64 VM
 
 First download `ubuntu-20.04.1-live-server-arm64.iso` image from:
 
@@ -56,7 +56,7 @@ sockets: 1
 vga: serial0
 ```
 
-#### Installing Ubuntu to VM
+## Installing Ubuntu to VM
 
 Then need to start VM and open `xterm.js` console, because default `noVNC`
 not able for work with VGA via serial port (each press to any key will send Enter to VM).

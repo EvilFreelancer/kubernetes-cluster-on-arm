@@ -2,47 +2,61 @@
 
 Project about simple Kubernetes clusters on ARM nodes.
 
-![Image](arm-cluster.png)
+![Image](assets/arm-cluster.png)
 
 <!-- toc -->
 
-* [Specifications](#Specifications)
-  * [NanoPi NEO3 based solution](#NanoPi-NEO3-based-solution)
-  * [Raspberry Pi CM3 based solution](#Raspberry-Pi-CM3-based-solution)
-  * [Software](#Software)
-* [Installing Operating Systems](#Installing-Operating-Systems)
-  * [Installing OS to NanoPi NEO3](#Installing-OS-to-NanoPi-NEO3)
-  * [Installing OS to Raspberry Pi CM3](#Installing-OS-to-Raspberry-Pi-CM3)
-* [Deploying K3S with help of Ansible](#Deploying-K3S-with-help-of-Ansible)
-  * [Install all required packages on all servers](#Install-all-required-packages-on-all-servers)
-  * [Deploy k3s server to controller](#Deploy-k3s-server-to-controller)
-  * [Deploy k3s agent to nodes](#Deploy-k3s-agent-to-nodes)
-* [Video blog about this project](#Video-blog-about-this-project)
+- [Specifications](#specifications)
+  * [Controller](#controller)
+  * [Nodes](#nodes)
+    + [NanoPi NEO3 based solution](#nanopi-neo3-based-solution)
+    + [Raspberry Pi CM3 based solution](#raspberry-pi-cm3-based-solution)
+  * [Software](#software)
+- [Installing Operating Systems](#installing-operating-systems)
+  * [Installing OS to NanoPi NEO3](#installing-os-to-nanopi-neo3)
+  * [Installing OS to Raspberry Pi CM3](#installing-os-to-raspberry-pi-cm3)
+- [Deploying K3S with help of Ansible](#deploying-k3s-with-help-of-ansible)
+  * [Install all required packages on all servers](#install-all-required-packages-on-all-servers)
+  * [Deploy k3s server to controller](#deploy-k3s-server-to-controller)
+  * [Deploy k3s agent to nodes](#deploy-k3s-agent-to-nodes)
+  * [Install and configure kubectl](#install-and-configure-kubectl)
+- [How to enable Kubernetes Dashboard](#how-to-enable-kubernetes-dashboard)
+- [Video blog about this project](#video-blog-about-this-project)
+- [Links](#links)
 
 <!-- tocstop -->
 
 ## Specifications
 
-### NanoPi NEO3 based solution
+Communication between nodes and controller:
 
-- 1x D-Link DGS-1005A/c
+- 1x [Mercusys MS108G](https://www.mercusys.com/en/product/details/ms108g)
+
+### Controller
+
+- 1x Ethernet cable (with four copper pairs)
+- 1x USB Type-C cable
+- 1x Power supply adapter 5V/2A for USB devices
+- 1x Raspberry Pi 4B (CPU: quad-core, RAM: 8Gb)
+- 1x MicroSD card 32Gb (by Samsung, the EVO series)
+
+### Nodes
+
+#### NanoPi NEO3 based solution
+
 - 4x Ethernet cable (with four copper pairs)
 - 4x USB Type-C cable
 - 4x Power supply adapter 5V/2A for USB devices
-- 4x NanoPi NEO3 (CPU: quad-core, RAM: 2Gb)
-- 4x MicroSD card 32Gb (by Samsung, the EVO series)
+- 4x [NanoPi NEO3](https://www.friendlyelec.com/index.php?route=product/product&product_id=279) (CPU: quad-core, RAM: 2Gb)
+- 4x MicroSD card 32Gb (class 10)
 
-### Raspberry Pi CM3 based solution
+#### Raspberry Pi CM3 based solution
 
-- 1x D-Link DGS-1005A/c
 - 2x Ethernet cable (with four copper pairs)
-- 1x USB Type-C cable
-- 1x Power supply adapter 5V/2A for USB devices
 - 1x Power supply adapter 12V/5A for TuringPi board
 - 1x [TuringPi V1](https://turingpi.com/v1/) cluster board
-- 7x Raspberry Pi CM3 (CPU: quad-core, RAM: 1Gb)
-- 1x Raspberry Pi 4B (CPU: quad-core, RAM: 8Gb)
-- 8x MicroSD card 32Gb (by Samsung, the EVO series)
+- 7x [Raspberry Pi CM3 Lite](https://www.raspberrypi.com/products/compute-module-3/) (CPU: quad-core, RAM: 1Gb)
+- 7x MicroSD card 32Gb (class 10)
 
 ### Software
 
@@ -246,9 +260,12 @@ All videos on Russian language.
 
 1. [Introduction and technical description](https://www.youtube.com/watch?v=jXRgqQrbKAo)
 2. [Installing operating systems](https://www.youtube.com/watch?v=A4kwBo6eRKE)
-3. Installing and using additional tools for automation
-4. TBA...
+3. [Deploy K3S with help of Ansible](https://www.youtube.com/watch?v=u_AuOKlqTNw)
+4. [Moving controller to Raspberry Pi 4B](https://www.youtube.com/watch?v=KBxG_zOksbY)
+5. Kubernetes Dashboard and GoCD server with agents in Kubernetes
+6. TBA...
 
 ## Links
 
+* [Note about Proxmox and ARM virtual machine](PROXMOX.md)
 * https://medium.com/@tejaswi.goudru/disable-authentication-https-in-kubernetes-dashboard-2fada478ce91
