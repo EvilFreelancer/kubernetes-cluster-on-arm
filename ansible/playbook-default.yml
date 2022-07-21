@@ -11,6 +11,18 @@
       with_file:
         - "{{ pub_key }}"
 
+    - name: Set fact for packages to remove (Ubuntu >= 20.04)
+      set_fact:
+        ubuntu_annoying_packages:
+          - whoopsie # security (CIS 4.1)
+          - apport   # security (CIS 4.1)
+          - command-not-found # annoying
+          - command-not-found-data # annoying
+          - python3-commandnotfound # annoying
+          - snapd # annoying (Ubuntu >= 16.04)
+          - lxd-agent-loader # annoying (Ubuntu 20.04)
+      when: (ansible_distribution == 'Ubuntu') and (ansible_distribution_version >= '20.04')
+
     - name: Update the APT packages index
       apt:
         name: "*"
@@ -18,7 +30,7 @@
         update_cache: yes
         force_apt_get: yes
 
-    - name: Install additional packages
+    - name: Install "vxlan" module (Ubuntu RASPI >= 22.04)
       become: true
       apt:
         name:
@@ -26,14 +38,14 @@
         state: latest
         update_cache: yes
         force_apt_get: yes
-      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
+      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel) and (ansible_distribution_version >= '22.04')
 
-    - name: Add the vxlan module
+    - name: Enable "vxlan" module (Ubuntu RASPI >= 22.04)
       become: true
       modprobe:
         name: vxlan
         state: present
-      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel)
+      when: (ansible_distribution == 'Ubuntu') and ("raspi" in ansible_kernel) and (ansible_distribution_version >= '22.04')
 
     - name: Install all required packages
       apt:
@@ -47,10 +59,17 @@
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 
-    - name: Add Docker official repository for Ubuntu Focal
+    - name: Add Docker official repository (Ubuntu 20.04)
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu focal stable
         state: present
+      when: (ansible_distribution == 'Ubuntu') and (ansible_distribution_version == '20.04')
+
+    - name: Add Docker official repository (Ubuntu 22.04)
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+      when: (ansible_distribution == 'Ubuntu') and (ansible_distribution_version == '22.04')
 
     - name: Update the APT packages index
       apt:

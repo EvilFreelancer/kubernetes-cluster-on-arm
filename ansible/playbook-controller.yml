@@ -11,7 +11,7 @@
         state: directory
         mode: 0755
 
-    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-controller/" directory (in not exists)
+    - name: Copy "docker-compose.yml" to "/home/{{ username }}/k3s-controller/" directory (if not exists)
       copy:
         src: ../k3s-controller/docker-compose.yml
         dest: /home/{{ username }}/k3s-controller/docker-compose.yml
